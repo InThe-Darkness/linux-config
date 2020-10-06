@@ -1,5 +1,8 @@
 #!/usr/bin/bash
 
+# these softwares will be installed 
+# gcc g++ python3 git vim pip3 vscode
+
 
 #set apt source to tsinghua
 read -p "use the mirror of tsinghua and move old sources.list to sources.list.backup?(y/n):" arg
@@ -10,7 +13,7 @@ fi
 
 #install softwares
 apt update
-software=(gcc g++ python3 pip3 git vim)
+software=(gcc g++ python3 git vim)
 for i in "${software[@]}";
 do
     $i --version > /dev/null 2>&1
@@ -22,6 +25,15 @@ do
     fi
 
 done
+
+#install pip3
+pip3 --version > /dev/null 2>&1
+if [ $? -ne 0 ];then
+    read -p "install pip3?(y/n):" arg
+    if [ -z "$arg" ] -o [ "$arg" = "y" -o "$arg" = "Y" ];then
+        apt install python3-pip
+    fi
+fi
 
 #set pip source to tsinghua
 read -p "set pip3 mirror to tsinghua(y/n):" arg
@@ -38,3 +50,5 @@ if [ -z "$arg" ] -o [ "$arg" = "y" -o "$arg" = "Y" ];then
     dpkg -i vscode.deb
 fi
 
+# other configure
+echo "set nu" >> /etc/vim/vimrc
