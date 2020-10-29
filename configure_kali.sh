@@ -54,7 +54,8 @@ fi
 vscode=https://vscode.cdn.azure.cn/stable/2af051012b66169dde0c4dfae3f5ef48f787ff69/code_1.49.3-1601661857_amd64.deb
 read -p "get vscode from $vscode and install(y/n):" arg
 if [ -z "$arg" ] || [ "$arg" = "y" -o "$arg" = "Y" ];then
-    wget $vscode -O vscode.deb -o vscode_download.log
+    wget $vscode -O vscode.deb
+    echo "Visual Studio Code downloaded"
     dpkg -i vscode.deb
 fi
 
