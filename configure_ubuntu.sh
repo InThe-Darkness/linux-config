@@ -32,14 +32,22 @@ if [ $? -ne 0 ];then
     read -p "install pip3?(y/n):" arg
     if [ -z "$arg" ] || [ "$arg" = "y" -o "$arg" = "Y" ];then
         apt install python3-pip
+        pip3installed=1
+    else
+        pip3installed=0
     fi
+else
+    pip3installed=1
 fi
 
 #set pip source to tsinghua
-read -p "set pip3 mirror to tsinghua(y/n):" arg
-if [ -z "$arg" ] || [ "$arg" = "y" -o "$arg" = "Y" ];then
-    pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+if [ $pip3installed = 1 ]; then
+    read -p "set pip3 mirror to tsinghua(y/n):" arg
+    if [ -z "$arg" ] || [ "$arg" = "y" -o "$arg" = "Y" ];then
+        pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+    fi
 fi
+
 
 
 #download and install vscode
@@ -52,3 +60,4 @@ fi
 
 # other configure
 echo "set nu" >> /etc/vim/vimrc
+echo "tabstop=4" >> /etc/vim/vimrc
