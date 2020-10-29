@@ -1,0 +1,55 @@
+#!/usr/bin/bash
+
+# these softwares will be installed 
+# gcc g++ python3 git vim pip3 vscode
+
+
+#set apt source to tsinghua
+read -p "use the mirror of tsinghua and move old sources.list to sources.list.backup?(y/n):" arg
+if [ -z "$arg" ] || [ "$arg" = "y" -o "$arg" = "Y" ];then
+    mv /etc/apt/sources.list /etc/apt/sources.list.backup
+    echo "deb http://mirrors.tuna.tsinghua.edu.cn/kali kali-rolling main contrib non-free" > /etc/apt/sources.list 
+    echo "deb-src https://mirrors.tuna.tsinghua.edu.cn/kali kali-rolling main contrib non-free" >> /etc/apt/sources.list
+fi
+
+#install softwares
+apt update
+software=(gcc g++ python3 git vim gdb)
+for i in "${software[@]}";
+do
+    $i --version > /dev/null 2>&1
+    if [ $? -ne 0 ];then
+        read -p "install $i?(y/n):" arg
+        if [ -z "$arg" ] || [ "$arg" = "y" -o "$arg" = "Y" ];then
+            apt install $i
+        fi
+    fi
+
+done
+
+#install pip3
+pip3 --version > /dev/null 2>&1
+if [ $? -ne 0 ];then
+    read -p "install pip3?(y/n):" arg
+    if [ -z "$arg" ] || [ "$arg" = "y" -o "$arg" = "Y" ];then
+        apt install python3-pip
+    fi
+fi
+
+#set pip source to tsinghua
+read -p "set pip3 mirror to tsinghua(y/n):" arg
+if [ -z "$arg" ] || [ "$arg" = "y" -o "$arg" = "Y" ];then
+    pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+fi
+
+
+#download and install vscode
+vscode=https://vscode.cdn.azure.cn/stable/2af051012b66169dde0c4dfae3f5ef48f787ff69/code_1.49.3-1601661857_amd64.deb
+read -p "get vscode from $vscode and install(y/n):" arg
+if [ -z "$arg" ] || [ "$arg" = "y" -o "$arg" = "Y" ];then
+    wget $vscode -O vscode.deb -o vscode_download.log
+    dpkg -i vscode.deb
+fi
+
+# other configure
+echo "set nu" >> /etc/vim/vimrc
